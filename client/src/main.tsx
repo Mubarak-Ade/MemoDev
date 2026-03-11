@@ -1,10 +1,9 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import { BrowserRouter } from 'react-router'
-import App from './App.tsx'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { AuthProvider } from './AuthProvider.tsx'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter } from 'react-router';
+import App from './App.tsx';
+import './index.css';
 
 document.documentElement.classList.add('dark')
 
@@ -14,9 +13,7 @@ createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <BrowserRouter>
             <QueryClientProvider client={queryClient}>
-                <AuthProvider>
-                    <App />
-                </AuthProvider>
+                <App />
             </QueryClientProvider>
         </BrowserRouter>
     </StrictMode>,
