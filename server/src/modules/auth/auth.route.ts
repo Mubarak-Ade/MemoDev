@@ -13,6 +13,6 @@ router.route('/logout').post(logout);
 router.route('/forgot-password').post(passwordLimiter, forgotPassword);
 router.route('/reset-password').post(passwordLimiter, resetPassword);
 router.use(protect)
-router.route('/me').post(getUser);
+router.route('/me').get(getUser);
 
 export default router;

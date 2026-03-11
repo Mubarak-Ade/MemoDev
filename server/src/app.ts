@@ -4,12 +4,19 @@ import morgan from 'morgan'
 import authRoute from './modules/auth/auth.route'
 import { isHttpError } from 'http-errors'
 import cookieParser from 'cookie-parser';
-
+import cors from "cors"
+import env from './env';
 const app = express()
+
+app.use(cors({
+    origin: env.CLIENT_URL,
+    credentials: true
+}))
 
 app.use(cookieParser())
 
 app.set('trust-proxy', 1)
+
 
 app.use(express.json())
 
