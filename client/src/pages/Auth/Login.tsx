@@ -15,8 +15,8 @@ import { Link } from 'react-router'
 import { useForm } from 'react-hook-form'
 import { LoginSchema, type Login as LoginInput } from '@/schema/AuthSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query';
 import { useLogin } from '@/modules/auth/hooks';
+import { toast } from 'sonner';
 
 export const Login = () => {
     const {
@@ -26,14 +26,16 @@ export const Login = () => {
         setError,
     } = useForm<LoginInput>({ resolver: zodResolver(LoginSchema) })
 
-    const login = useMutation(useLogin())
+    const login = useLogin()
 
     const onSubmit = (data: LoginInput) => {
         login.mutate(data, {
             onSuccess: () => {
+                toast.success('Welcome back.')
                 window.location.href = '/dashboard'
             },
             onError: (error) => {
+                toast.error(String(error))
                 setError('root', { message: String(error)})                
             },
         })
@@ -41,8 +43,8 @@ export const Login = () => {
 
 
     return (
-        <div className="h-screen flex justify-center items-center">
-            <Card className="max-w-lg w-full p-5">
+        <div className="w-full flex items-center justify-center">
+            <Card className="max-w-lg w-full p-5 shadow-[0px_5px_30px] shadow-primary/20">
                 <CardHeader className="mb-5">
                     <CardTitle className="text-3xl mb-2 font-bold">Sign In</CardTitle>
                     <CardDescription className="text-base">

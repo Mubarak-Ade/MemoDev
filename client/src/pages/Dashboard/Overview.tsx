@@ -2,13 +2,22 @@ import { Button } from '@/components/ui/button';
 import { useLogout } from '@/modules/auth/hooks';
 import { useGetUser } from '@/modules/user/hooks';
 import { useCallback } from 'react';
+import { toast } from 'sonner';
 
 export const Overview = () => {
     const { data: user } = useGetUser()
     const logout = useLogout()
 
     const handleLogout = useCallback(() => {
-        logout.mutate()
+        logout.mutate(undefined, {
+            onSuccess: () => {
+                toast.success('Logged out.')
+                window.location.href = '/login'
+            },
+            onError: (error) => {
+                toast.error(String(error))
+            },
+        })
     }, [logout])
 
     return (

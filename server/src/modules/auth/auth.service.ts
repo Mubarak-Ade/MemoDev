@@ -48,6 +48,18 @@ export const verifyEmail = async (token: string) => {
     await user.save()
 }
 
+export const resendVerifyEmail = async (email: string) => {
+    if (!email) throw createHttpError(400, 'Email is required')
+    const user = await User.findOne({ email })
+    if (!user || user.isVerified) return false
+    const { token, expiry } = generateVerifyToken()
+    user.verifyToken = token
+    user.verifyTokenExpiresAt = expiry
+    await user.save()
+    await sendVerificationEmail(email, token)
+    return true
+}
+
 interface SessionDTO {
     userAgent: string
     ip: string
@@ -178,6 +190,7 @@ export default {
     logout,
     getUser,
     verifyEmail,
+    resendVerifyEmail,
     forgotPassword,
     resetPassword,
 }

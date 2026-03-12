@@ -38,6 +38,18 @@ export const verifyEmail: RequestHandler = async (req, res, next): Promise<void>
     }
 }
 
+export const resendEmail: RequestHandler = async (req, res, next): Promise<void> => {
+    try {
+        const sent = await AuthService.resendVerifyEmail(req.body.email)
+        res.status(200).json({
+            message: 'If the email exists and is unverified, a link has been sent',
+            sent,
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
 export const getUser: RequestHandler = async (req, res, next): Promise<void> => {
     try {
         const user = await AuthService.getUser(req.userId as string)

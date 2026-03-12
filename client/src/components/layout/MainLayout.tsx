@@ -1,21 +1,15 @@
-import { Navigate, Outlet, useLocation } from 'react-router'
+import { Outlet } from 'react-router'
 import { Navbar } from '../features/Navbar'
-import { useGetUser } from '@/modules/user/hooks'
 
 const MainLayout = () => {
-    const location = useLocation()
-    const isAuthRoute = location.pathname === '/login' || location.pathname === '/register'
-    const { data: user, isLoading } = useGetUser(!isAuthRoute)
-    if (isLoading) {
-        return null
-    }
-    if (user) {
-        return <Navigate to="/dashboard" replace />
-    }
     return (
-        <div>
-            <Navbar />
-            <main>
+        <div className='h-screen flex items-center flex-col'>
+            <div className="px-5 w-full font-sans py-4 items-center border-b border-accent/20 flex justify-between">
+                <div className="">
+                    <h1 className="text-xl font-bold">MemoDev</h1>
+                </div>
+            </div>
+            <main className="flex flex-col items-center w-full h-full p-5 justify-center">
                 <Outlet />
             </main>
         </div>

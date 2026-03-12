@@ -1,30 +1,63 @@
-import { Field, FieldError, FieldLabel } from '@/components/ui/field';
-import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
-import type { FieldError as FE } from 'react-hook-form';
-import type { IconType } from 'react-icons/lib';
-import { Link } from 'react-router';
+import { Button } from '@/components/ui/button';
+import { Field, FieldError, FieldLabel } from '@/components/ui/field'
+import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
+import { useState, type ComponentPropsWithoutRef } from 'react'
+import type { FieldError as FE } from 'react-hook-form'
+import { HiEye, HiEyeOff } from 'react-icons/hi';
+import type { IconType } from 'react-icons/lib'
+import { Link } from 'react-router'
 
-interface InputFieldProps {
+interface InputFieldProps extends ComponentPropsWithoutRef<'input'> {
     label: string
     placeholder: string
     icon: IconType
-    type: string,
-    enable?: boolean,
+    type: string
+    enable?: boolean
     errors?: FE
 }
 
-export const InputField = ({ label, placeholder, icon: Icon, type, enable, errors, ...props}: InputFieldProps) => {
+export const InputField = ({
+    label,
+    placeholder,
+    icon: Icon,
+    type,
+    enable,
+    errors,
+    ...props
+}: InputFieldProps) => {
+
+    const [showPassword, setShowPassword] = useState(false)
+    const isPassword = type === 'password'
+    const inputType = isPassword && showPassword ? 'text' : type
+
     return (
-        <Field className="space-y-2">
+        <Field className="">
             <div className="flex justify-between">
                 <FieldLabel className="text-accent">{label}</FieldLabel>
-                {enable && type === 'password' && <Link to="forgot-password" className="text-primary">Forgot Password?</Link>}
+                {enable && isPassword && (
+                    <Link to="/forgot-password" className="text-primary">
+                        Forgot Password?
+                    </Link>
+                )}
             </div>
             <InputGroup className="w-full py-6 ring ring-accent">
-                <InputGroupInput {...props} type={type} placeholder={placeholder} />
+                <InputGroupInput {...props} type={inputType} placeholder={placeholder} />
                 <InputGroupAddon>
                     <Icon />
                 </InputGroupAddon>
+                {isPassword && (
+                    <InputGroupAddon align="inline-end">
+                        <Button
+                            onClick={() => setShowPassword(!showPassword)}
+                            type="button"
+                            variant="outline"
+                            className="cursor-pointer"
+                            aria-label={showPassword ? 'Hide password' : 'Show password'}
+                        >
+                            {showPassword ? <HiEyeOff /> : <HiEye /> }
+                        </Button>
+                    </InputGroupAddon>
+                )}
             </InputGroup>
             {errors && <FieldError>{errors.message}</FieldError>}
         </Field>
