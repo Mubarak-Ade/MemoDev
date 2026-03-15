@@ -70,7 +70,7 @@
     --chart-3: var(--ink-black-2);
     --chart-4: var(--ink-black-3);
     --chart-5: var(--ink-black);
-    --sidebar: var(--ink-black-2);
+    --sidebar: var(--ink-black);
     --sidebar-foreground: #f6f8fb;
     --sidebar-primary: var(--azure-blue);
     --sidebar-primary-foreground: #ffffff;

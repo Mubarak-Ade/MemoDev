@@ -1,4 +1,4 @@
-import { InferSchemaType, Model, model, Schema } from "mongoose";
+import { Model, model, Schema } from "mongoose";
 import bcrypt from "bcryptjs"
 
 export interface IUser extends Document {

@@ -1,7 +1,9 @@
 import 'dotenv/config'
 import express, { NextFunction, Request, Response } from 'express'
 import morgan from 'morgan'
-import authRoute from './modules/auth/auth.route'
+import authRoutes from './modules/auth/auth.route'
+import projectRoutes from "./modules/project/project.route"
+import snippetRoutes from "./modules/snippet/snippet.route"
 import { isHttpError } from 'http-errors'
 import cookieParser from 'cookie-parser';
 import cors from "cors"
@@ -22,7 +24,9 @@ app.use(express.json())
 
 app.use(morgan('dev'))
 
-app.use('/api/auth', authRoute)
+app.use('/api/auth', authRoutes)
+app.use('/api/projects', projectRoutes)
+app.use('/api/snippets', snippetRoutes)
 
 app.get('/', (req, res) => {
     res.send({
