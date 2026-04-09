@@ -11,7 +11,6 @@ const transporter = nodemailer.createTransport({
     },
 })
 
-console.log({ host: env.SMTP_HOST, port: env.SMTP_PORT, user: env.SMTP_USER ? 'OK' : 'MISSING' })
 
 export const sendVerificationEmail = async (email: string, token: string) => {
     const link = `${env.CLIENT_URL}/verify-email?token=${token}`
@@ -28,7 +27,8 @@ export const sendVerificationEmail = async (email: string, token: string) => {
                     </a>
                     <p>If you didn’t sign up, ignore this email.</p>
                 </div>`,
-    })
+            })
+            console.log({ host: env.SMTP_HOST, port: env.SMTP_PORT, user: env.SMTP_USER ? 'OK' : 'MISSING' })
 }
 
 export const resetPasswordEmail = async (email: string, token: string) => {
@@ -47,4 +47,6 @@ export const resetPasswordEmail = async (email: string, token: string) => {
                     <p>If you didn’t request a password reset, ignore this email.</p>
                 </div>`,
     })
+            console.log({ host: env.SMTP_HOST, port: env.SMTP_PORT, user: env.SMTP_USER ? 'OK' : 'MISSING' })
+
 }
