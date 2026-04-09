@@ -1,0 +1,20 @@
+{
+    "name": "memodev",
+    "version": "1.0.0",
+    "private": true,
+    "workspaces": [
+        "packages/*",
+        "apps/*"
+    ],
+    "description": "MemoDev is a full-stack developer knowledge vault designed to help programmers store, organize, and revisit implementation logic, documentation, and reusable code snippets across projects.",
+
+    "scripts": {
+        "dev": "npm run dev -w @memodev/server & npm run dev -w @memodev/client",
+        "dev:server": "npm run dev -w @memodev/server",
+        "dev:client": "npm run dev -w @memodev/client",
+        "build": "npm run build -w @memodev/server && npm run build -w @memodev/client"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
+}

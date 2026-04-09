@@ -1,0 +1,48 @@
+export const devVaultTheme = {
+    colors: {
+        background: '#0f0f0f',
+        backgroundSecondary: '#171717',
+        backgroundTertiary: '#1f1f1f',
+        textPrimary: '#e5e5e5',
+        textSecondary: '#a3a3a3',
+        textMuted: '#737373',
+        borderDefault: '#2a2a2a',
+        borderSubtle: '#1f1f1f',
+        primary: '#3b82f6',
+        success: '#22c55e',
+        warning: '#f59e0b',
+        danger: '#ef4444',
+        codeBackground: '#111111',
+    },
+    typography: {
+        sans: '"Inter Variable", Inter, system-ui, sans-serif',
+        mono: '"JetBrains Mono", "Cascadia Code", ui-monospace, SFMono-Regular, monospace',
+        sizes: {
+            h1: '28px',
+            h2: '22px',
+            h3: '18px',
+            body: '15px',
+            small: '12px',
+            code: '13px',
+        },
+    },
+    spacing: {
+        x1: '4px',
+        x2: '8px',
+        x3: '12px',
+        x4: '16px',
+        x6: '24px',
+        x8: '32px',
+    },
+    layout: {
+        sidebarWidth: '300px',
+        topBarHeight: '56px',
+        radiusSm: '8px',
+        radiusMd: '12px',
+        radiusLg: '16px',
+    },
+    motion: {
+        fast: '150ms ease-out',
+        normal: '200ms ease-out',
+    },
+} as const
