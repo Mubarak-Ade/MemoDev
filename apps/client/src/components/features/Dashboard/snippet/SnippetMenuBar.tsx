@@ -22,10 +22,10 @@ import { toast } from 'sonner'
 interface MenuBarProps {
     id?: string,
     navigate: NavigateFunction
-    // duplicate
+    onActionStateChange?: (label: string | null) => void
 }
 
-export const SnippetMenuBar = memo(({ id, navigate }: MenuBarProps) => {
+export const SnippetMenuBar = memo(({ id, navigate, onActionStateChange }: MenuBarProps) => {
 
 
     const deleteMutation = useDeleteSnippet()
@@ -37,12 +37,17 @@ export const SnippetMenuBar = memo(({ id, navigate }: MenuBarProps) => {
     }
 
     const handleDeleteSnippet = () => { 
+         onActionStateChange?.('Deleting snippet...')
          deleteMutation.mutate(id as string, {
             onSuccess: () => {
                 toast.success('Snippet Deleted successful')
             },
             onError: (error) => {
+                onActionStateChange?.(null)
                 toast.error(String(error))
+            },
+            onSettled: () => {
+                onActionStateChange?.(null)
             },
         })    
     }
@@ -76,9 +81,13 @@ export const SnippetMenuBar = memo(({ id, navigate }: MenuBarProps) => {
                     </MenubarGroup>
                     <MenubarSeparator />
                     <MenubarGroup>
-                        <MenubarItem onClick={handleDeleteSnippet} variant="destructive">
+                        <MenubarItem
+                            onClick={handleDeleteSnippet}
+                            variant="destructive"
+                            disabled={deleteMutation.isPending}
+                        >
                             <HiTrash />
-                            Delete Snippet
+                            {deleteMutation.isPending ? 'Deleting Snippet...' : 'Delete Snippet'}
                         </MenubarItem>
                     </MenubarGroup>
                 </MenubarContent>

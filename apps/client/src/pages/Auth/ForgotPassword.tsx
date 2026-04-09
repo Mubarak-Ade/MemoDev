@@ -1,7 +1,7 @@
 import { InputField } from '@/components/features/Reusable/InputField';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
-import { forgotPassword } from '@/modules/auth/services';
+import { useForgotPassword } from '@/modules/auth/hooks';
 import { useState } from 'react';
 import { HiArrowLeft, HiArrowRight, HiAtSymbol } from 'react-icons/hi';
 import { Link } from 'react-router';
@@ -10,10 +10,16 @@ import { toast } from 'sonner';
 export const ForgotPassword = () => {
 
     const [email, setEmail] = useState("")
+    const forgotPasswordMutation = useForgotPassword()
 
     const sendEmail = async () => {
-        await forgotPassword(email).then(() => {
-            toast.success('Password reset link sent to your email')
+        forgotPasswordMutation.mutate(email, {
+            onSuccess: () => {
+                toast.success('Password reset link sent to your email')
+            },
+            onError: (error) => {
+                toast.error(String(error))
+            },
         })
     }
 
@@ -35,7 +41,12 @@ export const ForgotPassword = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     type="email"
                 />
-                <Button onClick={sendEmail} className="mt-4 w-full cursor-pointer gap-2 px-4 py-5">
+                <Button
+                    onClick={sendEmail}
+                    className="mt-4 w-full cursor-pointer gap-2 px-4 py-5"
+                    loading={forgotPasswordMutation.isPending}
+                    loadingText="Sending Reset Link..."
+                >
                     Send Resend Link <HiArrowRight />
                 </Button>
             </CardContent>

@@ -23,26 +23,32 @@ import { useModal } from '@/store/ModalStore'
 interface MenuBarProps {
     id?: string,
     navigate: NavigateFunction
+    onActionStateChange?: (label: string | null) => void
 }
 
-export const ProjectMenuBar = memo(({ id, navigate }: MenuBarProps) => {
+export const ProjectMenuBar = memo(({ id, navigate, onActionStateChange }: MenuBarProps) => {
 
 
     const deleteMutation = useDeleteProject()
     const showModal = useModal(s => s.showModal)
 
-     const handleEditSnippet = () => {
+     const handleEditProject = () => {
         showModal("edit-project", {id})
     }
 
-    const handleDeleteSnippet = () => { 
+    const handleDeleteProject = () => { 
+         onActionStateChange?.('Deleting project...')
          deleteMutation.mutate(id as string, {
             onSuccess: () => {
                 toast.success('Project Deleted successful')
                 navigate('/projects')
             },
             onError: (error) => {
+                onActionStateChange?.(null)
                 toast.error(String(error))
+            },
+            onSettled: () => {
+                onActionStateChange?.(null)
             },
         })    
     }
@@ -58,12 +64,12 @@ export const ProjectMenuBar = memo(({ id, navigate }: MenuBarProps) => {
                 </MenubarTrigger>
                 <MenubarContent className="w-50">
                     <MenubarGroup>
-                        <MenubarItem onClick={handleEditSnippet}>
-                            <HiOutlinePencil /> Edit Snippet <MenubarShortcut>⌘T</MenubarShortcut>
+                        <MenubarItem onClick={handleEditProject}>
+                            <HiOutlinePencil /> Edit Project <MenubarShortcut>⌘T</MenubarShortcut>
                         </MenubarItem>
                         <MenubarItem>
                             <HiOutlineShare />
-                            Share Snippet
+                            Share Project
                         </MenubarItem>
                         <MenubarItem>
                             <HiFolder />
@@ -76,9 +82,13 @@ export const ProjectMenuBar = memo(({ id, navigate }: MenuBarProps) => {
                     </MenubarGroup>
                     <MenubarSeparator />
                     <MenubarGroup>
-                        <MenubarItem onClick={handleDeleteSnippet} variant="destructive">
+                        <MenubarItem
+                            onClick={handleDeleteProject}
+                            variant="destructive"
+                            disabled={deleteMutation.isPending}
+                        >
                             <HiTrash />
-                            Delete Snippet
+                            {deleteMutation.isPending ? 'Deleting Project...' : 'Delete Project'}
                         </MenubarItem>
                     </MenubarGroup>
                 </MenubarContent>

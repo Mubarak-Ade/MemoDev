@@ -21,6 +21,7 @@ import { useLocation, useNavigate } from 'react-router'
 import { toast } from 'sonner'
 import { CreateSnippetSkeleton } from '@/components/features/Dashboard/snippet/create_snippet/CreateSnippetSkeleton'
 import type { Project } from '@/schema/project.schema'
+import { LoadingOverlay } from '@/components/ui/loading-spinner'
 
 const DEFAULT_VALUES: SnippetFormInput = {
     title: '',
@@ -103,9 +104,16 @@ const SnippetEditorForm = ({
         <FormProvider {...methods}>
             <form
                 onSubmit={handleSubmit(onSubmit)}
-                className="min-h-screen bg-background text-foreground"
+                className="relative min-h-screen bg-background text-foreground"
             >
-                <CreateSnippetHeader isEditing={isEditing} />
+                {mutation.isPending && (
+                    <LoadingOverlay
+                        className="rounded-none"
+                        label={isEditing ? 'Updating snippet...' : 'Creating snippet...'}
+                    />
+                )}
+
+                <CreateSnippetHeader isEditing={isEditing} isSubmitting={mutation.isPending} />
 
                 <div className="mx-auto flex max-w-7xl flex-col gap-6 dv-section">
                     <SnippetTitleSection

@@ -52,8 +52,10 @@ const ResendModal = ({
                     type="button"
                     className="w-full cursor-pointer px-4 py-2"
                     disabled={loading}
+                    loading={loading}
+                    loadingText="Sending Email..."
                 >
-                    {loading ? 'Sending...' : 'Submit'}
+                    Submit
                 </Button>
             </div>
         </div>

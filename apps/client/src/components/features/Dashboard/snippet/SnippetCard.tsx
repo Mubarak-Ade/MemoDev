@@ -13,7 +13,8 @@ import { useNavigate } from 'react-router'
 import { SnippetMenuBar } from './SnippetMenuBar'
 import { iconMap } from '@/lib/iconMap'
 import { colorMap } from '@/lib/colorMap'
-import { memo, useCallback } from 'react'
+import { memo, useCallback, useState } from 'react'
+import { LoadingOverlay } from '@/components/ui/loading-spinner'
 
 interface SnippetCardProps {
     id?: string
@@ -43,10 +44,14 @@ export const SnippetCard = memo(({
     // const deleteMutation =
 
     const navigate = useNavigate()
+    const [actionLabel, setActionLabel] = useState<string | null>(null)
 
     const handleNavigate = useCallback(() => {
+        if (actionLabel) {
+            return
+        }
         navigate(slug ? `/snippets/${slug}` : '/snippets/create')
-    }, [navigate, slug])
+    }, [actionLabel, navigate, slug])
 
     const Icon = iconMap[projectIcon] || iconMap.folder
     const color = colorMap[projectColor]
@@ -64,12 +69,17 @@ export const SnippetCard = memo(({
             transition={{
                 duration: 0.15,
             }}
-            className="cursor-pointer transition-colors duration-150 ease-out"
+            className="relative cursor-pointer transition-colors duration-150 ease-out"
         >
+            {actionLabel && <LoadingOverlay label={actionLabel} />}
             <CardHeader className="border-b border-border pb-4">
                 <CardTitle className="dv-h3 line-clamp-1 capitalize">{title}</CardTitle>
                 <CardAction className="cursor-pointer z-50 p-0">
-                    <SnippetMenuBar id={id} navigate={navigate} />
+                    <SnippetMenuBar
+                        id={id}
+                        navigate={navigate}
+                        onActionStateChange={setActionLabel}
+                    />
                 </CardAction>
                 <CardDescription className="mt-4 flex flex-wrap items-center gap-2">
                     {tags.slice(0,3).map((tag) => (

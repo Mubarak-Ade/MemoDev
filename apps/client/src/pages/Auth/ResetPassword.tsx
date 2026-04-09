@@ -1,7 +1,7 @@
 import { InputField } from '@/components/features/Reusable/InputField'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
-import { resetPassword } from '@/modules/auth/services'
+import { useResetPassword } from '@/modules/auth/hooks'
 import { useState } from 'react'
 import { HiArrowLeft, HiLockClosed } from 'react-icons/hi'
 import { Link, useSearchParams } from 'react-router'
@@ -12,7 +12,7 @@ export const ResetPassword = () => {
     const token = searchParams.get('token')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
-    const [loading, setLoading] = useState(false)
+    const resetPasswordMutation = useResetPassword()
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -28,16 +28,18 @@ export const ResetPassword = () => {
             toast.error('Passwords do not match.')
             return
         }
-        try {
-            setLoading(true)
-            await resetPassword(token, password)
-            toast.success('Password reset successful. Please log in.')
-            window.location.href = '/login'
-        } catch (error) {
-            toast.error(String(error))
-        } finally {
-            setLoading(false)
-        }
+        resetPasswordMutation.mutate(
+            { token, password },
+            {
+                onSuccess: () => {
+                    toast.success('Password reset successful. Please log in.')
+                    window.location.href = '/login'
+                },
+                onError: (error) => {
+                    toast.error(String(error))
+                },
+            },
+        )
     }
 
     return (
@@ -70,9 +72,11 @@ export const ResetPassword = () => {
                         <Button
                             className="w-full cursor-pointer gap-2 px-4 py-2"
                             type="submit"
-                            disabled={loading}
+                            disabled={resetPasswordMutation.isPending}
+                            loading={resetPasswordMutation.isPending}
+                            loadingText="Resetting Password..."
                         >
-                            {loading ? 'Submitting...' : 'Submit'}
+                            Submit
                         </Button>
                     </form>
                 </CardContent>

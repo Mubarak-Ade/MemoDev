@@ -98,6 +98,9 @@ export const Register = () => {
                         <MotionWrap
                             as={Button}
                             type="submit"
+                            disabled={signup.isPending}
+                            loading={signup.isPending}
+                            loadingText="Creating Account..."
                             whileHover={{
                                 scale: 1.05,
                                 boxShadow: '0 2px 15px rgba(59, 130, 246, 0.35)',

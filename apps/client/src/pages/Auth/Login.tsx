@@ -78,6 +78,9 @@ export const Login = () => {
                         <MotionWrap
                             as={Button}
                             type="submit"
+                            disabled={login.isPending}
+                            loading={login.isPending}
+                            loadingText="Signing In..."
                             whileHover={{
                                 scale: 1.05,
                                 boxShadow: '0 2px 15px rgba(59, 130, 246, 0.35)',
@@ -90,6 +93,7 @@ export const Login = () => {
                             Sign In
                             <span>
                                 <Hi.HiArrowRight />
+                                <MotionWrap as="div" />
                             </span>
                         </MotionWrap>
                     </form>

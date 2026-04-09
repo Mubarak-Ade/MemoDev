@@ -4,8 +4,12 @@ import { useNavigate } from 'react-router'
 
 interface CreateSnippetHeaderProps {
     isEditing: boolean
+    isSubmitting?: boolean
 }
-export const CreateSnippetHeader = ({isEditing}: CreateSnippetHeaderProps) => {
+export const CreateSnippetHeader = ({
+    isEditing,
+    isSubmitting = false,
+}: CreateSnippetHeaderProps) => {
     const navigate = useNavigate()
     
     return (
@@ -30,6 +34,7 @@ export const CreateSnippetHeader = ({isEditing}: CreateSnippetHeaderProps) => {
                         variant="ghost"
                         onClick={() => navigate(-1)}
                         className="cursor-pointer text-muted-foreground hover:text-foreground"
+                        disabled={isSubmitting}
                     >
                         <HiX />
                         Cancel
@@ -37,6 +42,8 @@ export const CreateSnippetHeader = ({isEditing}: CreateSnippetHeaderProps) => {
                     <Button
                         type="submit"
                         className="cursor-pointer gap-2"
+                        loading={isSubmitting}
+                        loadingText={isEditing ? 'Updating Snippet...' : 'Creating Snippet...'}
                     >
                         <HiPlus />
                         {isEditing ? "Update Snippet" : "Create Snippet"}

@@ -22,6 +22,7 @@ import { HiX } from 'react-icons/hi'
 import { toast } from 'sonner'
 import { ProjectModalSkeleton } from './ProjectModalSkeleton'
 import { useModal } from '@/store/ModalStore'
+import { LoadingOverlay } from '@/components/ui/loading-spinner'
 
 
 export const ProjectModal = ({props} : {props?: {id: string}}) => {
@@ -82,7 +83,12 @@ export const ProjectModal = ({props} : {props?: {id: string}}) => {
 
     return (
         <>
-            <Card className="max-w-lg w-full py-6 px-2">
+            <Card className="relative max-w-lg w-full py-6 px-2">
+                {mutation.isPending && (
+                    <LoadingOverlay
+                        label={isEditing ? 'Updating project...' : 'Creating project...'}
+                    />
+                )}
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <CardHeader>
                         <CardTitle className="dv-h2">
@@ -161,7 +167,11 @@ export const ProjectModal = ({props} : {props?: {id: string}}) => {
                         </Field>
                     </CardContent>
                     <CardFooter className="flex-row-reverse gap-2 mt-4">
-                        <Button className="px-6">
+                        <Button
+                            className="px-6"
+                            loading={mutation.isPending}
+                            loadingText={isEditing ? 'Saving Changes...' : 'Creating Project...'}
+                        >
                             {isEditing ? 'Save Changes' : 'Create Project'}
                         </Button>
                         <Button
@@ -169,6 +179,7 @@ export const ProjectModal = ({props} : {props?: {id: string}}) => {
                             onClick={() => closeModal("edit-project")}
                             className="px-6"
                             variant={'ghost'}
+                            disabled={mutation.isPending}
                         >
                             Cancel
                         </Button>

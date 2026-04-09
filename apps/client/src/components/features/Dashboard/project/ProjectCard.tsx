@@ -14,6 +14,8 @@ import { HiClock } from 'react-icons/hi'
 import { ProjectMenuBar } from './ProjectMenuBar'
 import { Link, useNavigate } from 'react-router'
 import { colorMap } from '@/lib/colorMap'
+import { useState } from 'react'
+import { LoadingOverlay } from '@/components/ui/loading-spinner'
 
 interface ProjectCardProps{
     id: string,
@@ -31,16 +33,22 @@ export const ProjectCard = ({id, slug, icon, name: title, color, description, up
     console.log(color);
 
     const navigate = useNavigate()
+    const [actionLabel, setActionLabel] = useState<string | null>(null)
     
     return (
-        <Card className="w-full max-w-md">
+        <Card className="relative w-full max-w-md">
+            {actionLabel && <LoadingOverlay label={actionLabel} />}
             <CardHeader>
                 <CardTitle>
                     <Icon size={30} color={colorMap[color]} />
                 </CardTitle>
                 <CardDescription className='mt-2'>{title}</CardDescription>
                 <CardAction className='cursor-pointer'>
-                    <ProjectMenuBar id={id} navigate={navigate} />
+                    <ProjectMenuBar
+                        id={id}
+                        navigate={navigate}
+                        onActionStateChange={setActionLabel}
+                    />
                 </CardAction>
             </CardHeader>
             <CardContent>
