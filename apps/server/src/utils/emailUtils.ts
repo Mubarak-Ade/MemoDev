@@ -3,12 +3,15 @@ import env from '../env'
 
 const transporter = nodemailer.createTransport({
     host: env.SMTP_HOST,
-    port: env.SMTP_PORT,
+    port: Number(env.SMTP_PORT),
+    secure: Number(env.SMTP_PORT) === 465, // true for 465, false for other ports
     auth: {
         user: env.SMTP_USER,
         pass: env.SMTP_PASS,
     },
 })
+
+console.log({ host: env.SMTP_HOST, port: env.SMTP_PORT, user: env.SMTP_USER ? 'OK' : 'MISSING' })
 
 export const sendVerificationEmail = async (email: string, token: string) => {
     const link = `${env.CLIENT_URL}/verify-email?token=${token}`

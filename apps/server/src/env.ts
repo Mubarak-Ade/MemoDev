@@ -10,5 +10,7 @@ export default cleanEnv(process.env, {
     SMTP_HOST: str(),
     SMTP_PORT: port(),
     SMTP_USER: str(),
-    SMTP_PASS: str()
+    SMTP_PASS: str(),
+    RESEND_API_KEY: str(),
+    EMAIL_FROM: str(),
 })
