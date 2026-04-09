@@ -4,6 +4,7 @@ import { protect } from '../../middlewares/authMiddlewares';
 
 const router = Router();
 
+router.use(protect)
 router.route('/').get(getSnippets).post(createSnippet);
 router.route('/drafts').get(getDraftSnippets)
 router.route('/tags').get(getTags)

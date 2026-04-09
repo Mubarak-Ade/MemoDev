@@ -35,7 +35,7 @@ export const ForgotPassword = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     type="email"
                 />
-                <Button onClick={sendEmail} className="mt-4 w-full cursor-pointer gap-2 px-4 py-2">
+                <Button onClick={sendEmail} className="mt-4 w-full cursor-pointer gap-2 px-4 py-5">
                     Send Resend Link <HiArrowRight />
                 </Button>
             </CardContent>

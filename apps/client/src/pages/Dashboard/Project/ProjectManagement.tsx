@@ -31,7 +31,7 @@ export const ProjectManagement = () => {
                     Sort
                 </Button>
             </div>
-            <div className="grid grid-cols-3 p-10 gap-5">
+            <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 p-10 gap-5">
                 {isLoading
                     ? Array.from({ length: 6 }).map((_, index) => <ProjectCardSkeleton key={index} />)
                     : projects?.map((project) => (

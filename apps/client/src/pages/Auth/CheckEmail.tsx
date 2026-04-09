@@ -95,7 +95,7 @@ export const CheckEmail = () => {
             <p className={`dv-h3 mt-6 ${color}`}>{message}</p>
             <Button
                 onClick={() => setShowModal(!showModal)}
-                className="mt-4 cursor-pointer rounded-[8px] px-4 py-2"
+                className="mt-4 cursor-pointer rounded-[8px] px-4 py-5"
             >
                     Resend Email
             </Button>

@@ -43,7 +43,7 @@ export const Login = () => {
 
 
     return (
-        <div className="flex w-full items-center justify-center px-5">
+        <div className="flex w-full items-center justify-center">
             <Card className="w-full max-w-lg p-6">
                 <CardHeader className="mb-4">
                     <CardTitle className="dv-h2 mb-2">Sign In</CardTitle>
@@ -85,7 +85,7 @@ export const Login = () => {
                             whileTap={{
                                 scale: 0.9,
                             }}
-                            className="mt-5 w-full cursor-pointer px-4 py-2"
+                            className="mt-5 w-full cursor-pointer px-4 py-5"
                         >
                             Sign In
                             <span>

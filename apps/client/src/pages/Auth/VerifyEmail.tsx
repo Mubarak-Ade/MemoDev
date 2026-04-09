@@ -118,14 +118,14 @@ export const VerifyEmail = () => {
             {(status === 'error' || missingToken) && (
                 <Button
                     onClick={() => setShowModal(!showModal)}
-                    className="mt-4 cursor-pointer rounded-[8px] px-4 py-2"
+                    className="mt-4 cursor-pointer rounded-[8px] px-4 py-5"
                 >
                     Resend Email
                 </Button>
             )}
             {status === 'success' && (
                 <Link to="/login">
-                    <Button className="mt-4 cursor-pointer rounded-[8px] px-4 py-2">
+                    <Button className="mt-4 cursor-pointer rounded-[8px] px-4 py-5">
                         Login
                     </Button>
                 </Link>

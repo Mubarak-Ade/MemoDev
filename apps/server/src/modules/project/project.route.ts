@@ -11,6 +11,8 @@ import { protect } from '../../middlewares/authMiddlewares'
 
 const router = Router()
 
+router.use(protect)
+
 router.route('/').post(createProject).get(getProjects)
 router.route('/:slug/snippets').get(GetProjectDetails)
 router.route('/:id').get(getSingleProject).put(updateProject).delete(deleteProject)

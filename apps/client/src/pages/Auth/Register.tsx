@@ -43,7 +43,7 @@ export const Register = () => {
     }
 
     return (
-        <div className="flex w-full items-center justify-center px-5">
+        <div className="flex w-full items-center justify-center">
             <Card className="w-full max-w-lg p-6">
                 <CardHeader className="mb-4">
                     <CardTitle className="dv-h2 mb-2">Create Account</CardTitle>
@@ -71,7 +71,7 @@ export const Register = () => {
                                     {...register('email')}
                                     errors={errors.email}
                                 />
-                                <div className="flex gap-5">
+                                <div className="grid md:grid-cols-2 grid-cols-1 gap-5">
                                     <InputField
                                         label="Password"
                                         placeholder="Enter your Password"
@@ -105,7 +105,7 @@ export const Register = () => {
                             whileTap={{
                                 scale: 0.8,
                             }}
-                            className="mt-5 w-full cursor-pointer px-4 py-2"
+                            className="mt-5 w-full cursor-pointer px-4 py-5"
                         >
                             Create Account
                             <span>

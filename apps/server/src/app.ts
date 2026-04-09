@@ -29,7 +29,6 @@ app.use(express.json())
 app.use(morgan('dev'))
 
 app.use('/api/auth', authRoutes)
-app.use(protect)
 app.use('/api/projects', projectRoutes)
 app.use('/api/dashboard', dashboardRoute)
 app.use('/api/snippets', snippetRoutes)

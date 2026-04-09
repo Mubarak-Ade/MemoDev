@@ -30,7 +30,7 @@ export const DraftPage = () => {
         <div className="px-5 py-10 min-h-screen w-full">
             <h1 className='text-4xl font-bold'>All Drafts</h1>
             <h2 className='text-muted-foreground mt-2'>View all your unsaved snippets</h2>
-            <div className="mt-5 grid grid-cols-3 w-full  gap-5">
+            <div className="mt-5 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 w-full  gap-5">
                 {drafts && drafts.length > 0 ? drafts?.map((snippet, index) => (
                         <SnippetCard
                             code={snippet.code}
