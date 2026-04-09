@@ -1,21 +1,16 @@
 import nodemailer from 'nodemailer'
 import env from '../env'
+import { CreateEmailOptions, Resend } from 'resend'
 
-const transporter = nodemailer.createTransport({
-    host: env.SMTP_HOST,
-    port: Number(env.SMTP_PORT),
-    secure: Number(env.SMTP_PORT) === 465, // true for 465, false for other ports
-    auth: {
-        user: env.SMTP_USER,
-        pass: env.SMTP_PASS,
-    },
-})
-
+const resend = new Resend(env.RESEND_API_KEY)
+const sendMail = async (option: CreateEmailOptions) => {
+    return await resend.emails.send(option)
+}
 
 export const sendVerificationEmail = async (email: string, token: string) => {
     const link = `${env.CLIENT_URL}/verify-email?token=${token}`
-    await transporter.sendMail({
-        from: `MemoDev: <${env.SMTP_USER}>`,
+    const {data, error} = await sendMail({
+        from: `MemoDev: <${env.EMAIL_FROM}>`,
         to: email,
         subject: 'Verify your email',
         html: `<div style="font-family: sans-serif; line-height: 1.5;">
@@ -27,14 +22,17 @@ export const sendVerificationEmail = async (email: string, token: string) => {
                     </a>
                     <p>If you didn’t sign up, ignore this email.</p>
                 </div>`,
-            })
-            console.log({ host: env.SMTP_HOST, port: env.SMTP_PORT, user: env.SMTP_USER ? 'OK' : 'MISSING' })
+    })
+    if (error) {
+    console.error('Email error:', error)
+    throw new Error('Failed to send email')
+}
 }
 
 export const resetPasswordEmail = async (email: string, token: string) => {
     const link = `${env.CLIENT_URL}/reset-password?token=${token}`
-    await transporter.sendMail({
-        from: `MemoDev: <${env.SMTP_USER}>`,
+    const {data, error} = await sendMail({
+        from: `MemoDev: <${env.EMAIL_FROM}>`,
         to: email,
         subject: 'Reset your password',
         html: `<div style="font-family: sans-serif; line-height: 1.5;">
@@ -47,6 +45,4 @@ export const resetPasswordEmail = async (email: string, token: string) => {
                     <p>If you didn’t request a password reset, ignore this email.</p>
                 </div>`,
     })
-            console.log({ host: env.SMTP_HOST, port: env.SMTP_PORT, user: env.SMTP_USER ? 'OK' : 'MISSING' })
-
 }
