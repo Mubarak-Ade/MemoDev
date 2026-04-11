@@ -1,16 +1,19 @@
 import nodemailer from 'nodemailer'
 import env from '../env'
-import { CreateEmailOptions, Resend } from 'resend'
 
-const resend = new Resend(env.RESEND_API_KEY)
-const sendMail = async (option: CreateEmailOptions) => {
-    return await resend.emails.send(option)
-}
+const transporter = nodemailer.createTransport({
+    host: env.SMTP_HOST,
+    port: env.SMTP_PORT,
+    auth: {
+        user: env.SMTP_USER,
+        pass: env.SMTP_PASS,
+    },
+})
 
 export const sendVerificationEmail = async (email: string, token: string) => {
     const link = `${env.CLIENT_URL}/verify-email?token=${token}`
-    const {data, error} = await sendMail({
-        from: `MemoDev: <${env.EMAIL_FROM}>`,
+    await transporter.sendMail({
+        from: `MemoDev: <${env.SMTP_USER}>`,
         to: email,
         subject: 'Verify your email',
         html: `<div style="font-family: sans-serif; line-height: 1.5;">
@@ -23,16 +26,12 @@ export const sendVerificationEmail = async (email: string, token: string) => {
                     <p>If you didn’t sign up, ignore this email.</p>
                 </div>`,
     })
-    if (error) {
-    console.error('Email error:', error)
-    throw new Error('Failed to send email')
-}
 }
 
 export const resetPasswordEmail = async (email: string, token: string) => {
     const link = `${env.CLIENT_URL}/reset-password?token=${token}`
-    const {data, error} = await sendMail({
-        from: `MemoDev: <${env.EMAIL_FROM}>`,
+    await transporter.sendMail({
+        from: `MemoDev: <${env.SMTP_USER}>`,
         to: email,
         subject: 'Reset your password',
         html: `<div style="font-family: sans-serif; line-height: 1.5;">
