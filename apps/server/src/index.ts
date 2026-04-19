@@ -24,7 +24,7 @@ const startServer = async () => {
         app.listen(port, () => {
             console.log(`Server Listening in Port ${port}`)
         })
-    } catch (error) {
+    } catch (error: unknown) {
         console.error('Failed to start server', error)
         process.exit(1)
     }

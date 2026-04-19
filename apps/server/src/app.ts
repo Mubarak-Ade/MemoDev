@@ -34,7 +34,7 @@ app.use('/api/dashboard', dashboardRoute)
 app.use('/api/snippets', snippetRoutes)
 app.use('/api/search', searchRoute)
 
-app.get('/', (req, res) => {
+app.get('/', (req: Request, res: Response) => {
     res.send({
         message: 'Hello World',
     })

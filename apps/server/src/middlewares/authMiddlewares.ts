@@ -23,7 +23,7 @@ export const protect = (req: Request, res: Response, next: NextFunction) => {
         }
         req.userId = decoded.id
         next()
-    } catch (error) {
+    } catch (error: unknown) {
         throw createHttpError(401, 'Access Token Expired or Invalid')
     }
 }

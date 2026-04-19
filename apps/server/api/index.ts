@@ -17,7 +17,7 @@ import Project from '../src/models/Project'
 import Snippet from '../src/models/Snippet'
 const app = express()
 
-app.use(async (req, res, next) => {
+app.use(async (req: Request, res: Response, next: NextFunction) => {
     try {
         await connectDB();
          const results = await Promise.allSettled([
@@ -33,7 +33,7 @@ app.use(async (req, res, next) => {
         })
 
         next();
-    } catch (error) {
+    } catch (error: unknown) {
         console.error('Database connection failed:', error);
         res.status(503).json({ 
             error: 'Database connection failed',
@@ -63,7 +63,7 @@ app.use('/api/dashboard', dashboardRoute)
 app.use('/api/snippets', snippetRoutes)
 app.use('/api/search', searchRoute)
 
-app.get('/', (req, res) => {
+app.get('/', (req: Request, res: Response) => {
     res.send({
         message: 'Hello World',
     })

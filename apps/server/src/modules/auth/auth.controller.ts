@@ -10,7 +10,7 @@ export const signup: RequestHandler = async (req, res, next): Promise<void> => {
         const data = zodParser(AuthSchema, req.body)
         const message = await AuthService.signup(data)
         res.status(200).json(message)
-    } catch (error) {
+    } catch (error: unknown) {
         next(error)
     }
 }
@@ -22,7 +22,7 @@ export const login: RequestHandler = async (req, res, next): Promise<void> => {
         const { refresh, access } = await AuthService.login(data, { userAgent, ip })
         sendRefreshTokenCookie(res, refresh, access)
         res.status(200).json({ message: 'Login Successfully' })
-    } catch (error) {
+    } catch (error: unknown) {
         next(error)
     }
 }
@@ -31,7 +31,7 @@ export const verifyEmail: RequestHandler = async (req, res, next): Promise<void>
     try {
         await AuthService.verifyEmail(req.query.token as string)
         res.json({ message: 'Email Verified Successfully. You can now login' })
-    } catch (error) {
+    } catch (error: unknown) {
         next(error)
     }
 }
@@ -43,7 +43,7 @@ export const resendEmail: RequestHandler = async (req, res, next): Promise<void>
             message: 'If the email exists and is unverified, a link has been sent',
             sent,
         })
-    } catch (error) {
+    } catch (error: unknown) {
         next(error)
     }
 }
@@ -52,7 +52,7 @@ export const getUser: RequestHandler = async (req, res, next): Promise<void> => 
     try {
         const user = await AuthService.getUser(req.userId as string)
         res.status(200).json(user)
-    } catch (error) {
+    } catch (error: unknown) {
         next(error)
     }
 }
@@ -67,7 +67,7 @@ export const refresh: RequestHandler = async (req, res, next): Promise<void> => 
         const { refresh, access } = await AuthService.refresh(token)
         sendRefreshTokenCookie(res, refresh, access)
         res.status(200).json({ message: 'Token successfully refreshed' })
-    } catch (error) {
+    } catch (error: unknown) {
         clearAuthCookies(res)
         next(error)
     }
@@ -84,7 +84,7 @@ export const logout: RequestHandler = async (req, res, next): Promise<void> => {
         await AuthService.logout(token)
         clearAuthCookies(res)
         res.status(200).json({ message: 'Logout Successfully' })
-    } catch (error) {
+    } catch (error: unknown) {
         clearAuthCookies(res)
         next(error)
     }
@@ -94,7 +94,7 @@ export const forgotPassword : RequestHandler = async (req, res, next): Promise<v
   try {
     await AuthService.forgotPassword(req.body.email)
     res.status(200).json({ message: "Resent link sent to your email" });
-  } catch (error) {
+  } catch (error: unknown) {
     next(error);
   }
 };
@@ -103,7 +103,7 @@ export const resetPassword : RequestHandler = async (req, res, next): Promise<vo
   try {
     await AuthService.resetPassword(req.body.token, req.body.password)
     res.status(200).json({ message: "Password reset successfully" });
-  } catch (error) {
+  } catch (error: unknown) {
     next(error);
   }
 };

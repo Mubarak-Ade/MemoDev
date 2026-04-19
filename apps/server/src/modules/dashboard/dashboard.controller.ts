@@ -7,7 +7,7 @@ export const dashboardController: RequestHandler = async (req, res, next): Promi
         const userId = req.userId as string
         const output = await dashboardService(userId)
         res.status(200).json(output)
-    } catch (error) {
+    } catch (error: unknown) {
         next(error)
     }
 }

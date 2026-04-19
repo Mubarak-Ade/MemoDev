@@ -7,7 +7,7 @@ export const getSnippets: RequestHandler = async (req, res, next): Promise<void>
     try {
         const snippets = await SnippetService.GetSnippetService(req.userId as string, req.query)
         res.status(200).json(snippets)
-    } catch (error) {
+    } catch (error: unknown) {
         next(error)
     }
 }
@@ -17,7 +17,7 @@ export const getDraftSnippets: RequestHandler = async (req, res, next): Promise<
         const userId = req.userId as string
         const draft = await SnippetService.GetDraftSnippetService(userId)
         res.status(200).json(draft)
-    } catch (error) {
+    } catch (error: unknown) {
         next(error)
     }
 }
@@ -28,7 +28,7 @@ export const getSingleSnippet: RequestHandler = async (req, res, next): Promise<
         const userId = req.userId as string
         const snippet = await SnippetService.GetSingleSnippetService(id, userId)
         res.status(200).json(snippet)
-    } catch (error) {
+    } catch (error: unknown) {
         next(error)
     }
 }
@@ -38,7 +38,7 @@ export const getSnippetDetails: RequestHandler = async (req, res, next): Promise
         const slug = req.params.slug as string
         const snippet = await SnippetService.GetSnippetDetails(slug)
         res.status(200).json(snippet)
-    } catch (error) {
+    } catch (error: unknown) {
         next(error)
     }
 }
@@ -48,7 +48,7 @@ export const getTags: RequestHandler = async (req, res, next): Promise<void> => 
         const userId = req.userId as string
         const tags = await SnippetService.GetTagsService(userId)
         res.status(200).json(tags)
-    } catch (error) {
+    } catch (error: unknown) {
         next(error)
     }
 }
@@ -58,7 +58,7 @@ export const getLanguages: RequestHandler = async (req, res, next): Promise<void
         const userId = req.userId as string
         const language = await SnippetService.GetLangsService(userId)
         res.status(200).json(language)
-    } catch (error) {
+    } catch (error: unknown) {
         next(error)
     }
 }
@@ -68,7 +68,7 @@ export const createSnippet: RequestHandler = async (req, res, next): Promise<voi
         const data = zodParser(SnippetSchema, req.body)
         const snippet = await SnippetService.CreateSnippetService(data, req.userId as string)
         res.status(201).json(snippet)
-    } catch (error) {
+    } catch (error: unknown) {
         next(error)
     }
 }
@@ -80,7 +80,7 @@ export const updateSnippet: RequestHandler = async (req, res, next): Promise<voi
         const data = zodParser(SnippetSchema.partial(), req.body)
         const snippet = await SnippetService.UpdateSnippetService(id, data, userId)
         res.status(201).json(snippet)
-    } catch (error) {
+    } catch (error: unknown) {
         next(error)
     }
 }
@@ -89,7 +89,7 @@ export const deleteSnippet: RequestHandler = async (req, res, next): Promise<voi
     try {
         await SnippetService.DeleteSnippetService(req.params.id as string, req.userId as string)
         res.status(204).json({ message: 'Snippet Deleted Successfully' })
-    } catch (error) {
+    } catch (error: unknown) {
         next(error)
     }
 }

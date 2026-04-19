@@ -7,7 +7,7 @@ export const getProjects: RequestHandler = async (req, res, next): Promise<void>
     try {
         const project = await ProjectService.GetProjectService(req.userId as string)
         res.status(200).json(project)
-    } catch (error) {
+    } catch (error: unknown) {
         next(error)
     }
 }
@@ -18,7 +18,7 @@ export const getSingleProject: RequestHandler = async (req, res, next): Promise<
         const userId = req.userId as string
         const project = await ProjectService.GetSingleProjectService(id, userId)
         res.status(200).json(project)
-    } catch (error) {
+    } catch (error: unknown) {
         next(error)
     }
 }
@@ -29,7 +29,7 @@ export const GetProjectDetails: RequestHandler = async (req, res, next): Promise
         const userId = req.userId as string
         const project = await ProjectService.GetProjectDetails(slug, userId)
         res.status(200).json(project)
-    } catch (error) {
+    } catch (error: unknown) {
         next(error)
     }
 }
@@ -39,7 +39,7 @@ export const createProject: RequestHandler = async (req, res, next): Promise<voi
         const data = zodParser(ProjectSchema, req.body)
         const project = await ProjectService.CreateProjectService(data, req.userId as string)
         res.status(201).json(project)
-    } catch (error) {
+    } catch (error: unknown) {
         next(error)
     }
 }
@@ -51,7 +51,7 @@ export const updateProject: RequestHandler = async (req, res, next): Promise<voi
         const data = zodParser(ProjectSchema.partial(), req.body)
         const project = await ProjectService.UpdateProjectService(id, data, userId)
         res.status(201).json(project)
-    } catch (error) {
+    } catch (error: unknown) {
         next(error)
     }
 }
@@ -62,7 +62,7 @@ export const deleteProject: RequestHandler = async (req, res, next): Promise<voi
         const userId = req.userId as string
         await ProjectService.DeleteProjectService(id, userId)
         res.status(204).json({ message: 'Project Deleted Successfully' })
-    } catch (error) {
+    } catch (error: unknown) {
         next(error)
     }
 }

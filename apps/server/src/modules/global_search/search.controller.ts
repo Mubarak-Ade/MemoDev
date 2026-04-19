@@ -6,7 +6,7 @@ export const searchController: RequestHandler = async (req, res, next): Promise<
         const q = req.query.q as string
         const searchOutput = await GlobalSearchServices(q, req.userId as string)
         res.status(200).json(searchOutput)
-    } catch (error) {
+    } catch (error: unknown) {
         next(error)
     }
 }
