@@ -7,6 +7,8 @@ import crypto from 'crypto'
 const access_secret = env.ACCESS_SECRET
 const refresh_secret = env.REFRESH_SECRET
 
+const isProd = process.env.RUNTIME_ENV === 'production'
+
 export const generateAccessToken = (userId: string): string => {
     return jwt.sign({ id: userId } as TokenPayload, access_secret, { expiresIn: '15m' })
 }
@@ -22,14 +24,14 @@ export const sendRefreshTokenCookie = (
 ) => {
     res.cookie('accessToken', accessToken, {
         httpOnly: true,
-        secure: env.NODE_ENV === 'production',
-        sameSite: 'strict',
+        secure: isProd,
+        sameSite: isProd ? 'none' : 'lax',
         maxAge: 15 * 60 * 1000,
     })
     res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
-        secure: env.NODE_ENV === 'production',
-        sameSite: 'strict',
+        secure: isProd,
+        sameSite: isProd ? 'none' : 'lax',
         maxAge: 7 * 24 * 60 * 60 * 1000,
     })
 }
