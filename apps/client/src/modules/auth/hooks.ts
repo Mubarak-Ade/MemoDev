@@ -13,7 +13,7 @@ export const useLogin = () => {
     return useMutation({
         mutationFn: (data: Login) => loginService(data),
         onSuccess: async () => {
-            await queryClient.invalidateQueries({queryKey: ["user"]})
+            await queryClient.invalidateQueries({queryKey: ["users"]})
         }
     })
 }

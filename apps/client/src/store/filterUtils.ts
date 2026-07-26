@@ -1,4 +1,6 @@
-export const queryBuilder = (filter: any) => {
+import type { Filtering } from "@/schema/filter.schema"
+
+export const queryBuilder = (filter: Filtering) => {
     const params = new URLSearchParams()
     params.append('page', String(filter.page ?? 1))
     params.append('limit', String(filter.limit ?? 5))

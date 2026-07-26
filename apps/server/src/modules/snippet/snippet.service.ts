@@ -1,8 +1,7 @@
 import createHttpError from 'http-errors'
-import Snippet, { ISnippet } from '../../models/Snippet'
+import Snippet from '../../models/Snippet'
 import { SnippetDTO } from '../../schema/snippet.schema'
 import Project from '../../models/Project'
-import { _QueryFilter } from 'mongoose'
 import { queryFilter } from '../../utils/queryBuilder'
 
 const GetSnippetService = async (userId: string, query: any) => {
@@ -80,8 +79,8 @@ const GetSingleSnippetService = async (id: string, userId: string) => {
     return snippet
 }
 
-const GetSnippetDetails = async (slug: string) => {
-    const snippet = await Snippet.findOne({ slug }).populate('project', 'name icon color').lean()
+const GetSnippetDetails = async (slug: string, userId: string) => {
+    const snippet = await Snippet.findOne({ slug, user: userId }).populate('project', 'name icon color').lean()
     if (!snippet) throw createHttpError(404, 'Snippet Not Found')
     return snippet
 }

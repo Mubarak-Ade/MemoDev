@@ -1,6 +1,6 @@
 import z from 'zod'
 
-const DashboardSchema = z.object({
+export const DashboardSchema = z.object({
     totalSnippets: z.number(),
     totalProjects: z.number(),
     totalDrafts: z.number(),

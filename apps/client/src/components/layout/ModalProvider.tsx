@@ -6,7 +6,7 @@ export const Modal = () => {
     const current = useModal((s) => s.current)
     const props = current?.props as { id: string } | undefined
 
-    const RenderModal = () => {
+    const renderModal = () => {
         switch (current?.type) {
             case 'create-project':
                 return <ProjectModal />
@@ -24,7 +24,7 @@ export const Modal = () => {
 
     return (
         <div className="absolute z-50 backdrop-blur-md h-screen w-full bg-popover/50 flex items-center justify-center top-0 left-0">
-            <RenderModal />
+            {renderModal()}
         </div>
     )
 }

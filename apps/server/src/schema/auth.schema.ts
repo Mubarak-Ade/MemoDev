@@ -5,9 +5,9 @@ const AccessTokenPayload = z.object({
 })
 
 export const AuthSchema = z.object({
-    username: z.string(),
-    email: z.string(),
-    password: z.string(),
+    username: z.string().trim().min(3).max(40),
+    email: z.string().trim().toLowerCase().email(),
+    password: z.string().min(8).max(128),
 })
 
 export type AuthDTO = z.infer<typeof AuthSchema>

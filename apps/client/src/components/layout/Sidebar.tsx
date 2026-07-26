@@ -36,7 +36,7 @@ interface SideBtnProps {
 }
 
 export const SidebarButton = ({ link, name, icon: Icon, color }: SideBtnProps) => {
-    
+
     return (
         <SidebarMenuItem>
             <Link
@@ -61,6 +61,7 @@ export const SidebarButton = ({ link, name, icon: Icon, color }: SideBtnProps) =
 
 export const SideBar = () => {
     const { data: project, isLoading } = useProjects()
+
     const logout = useLogout()
 
     const showModal = useModal(s => s.showModal)
@@ -76,6 +77,7 @@ export const SideBar = () => {
             },
         })
     }, [logout])
+
 
     return (
         <Sidebar className="border-r border-sidebar-border bg-sidebar px-4 py-4">
@@ -110,7 +112,7 @@ export const SideBar = () => {
                     ? Array.from({ length: 3 }).map((_, index) => (
                         <SidebarMenuSkeleton key={index} showIcon />
                     ))
-                    : project?.slice(0, 3).map((project) => (
+                    : project && project.length > 0 ? project?.slice(0, 3)?.map((project) => (
                         <SidebarButton
                             link={`/projects/${project.slug}`}
                             name={project.name}
@@ -118,7 +120,11 @@ export const SideBar = () => {
                             icon={iconMap[project.icon] ?? iconMap.folder}
                             key={project._id}
                         />
-                    ))}
+                    )) :
+                        <p>
+                            No Project
+                        </p>
+                }
                 <Link to="projects">
                     <Button className="justify-start" variant={'link'}>
                         More Project <HiDotsHorizontal />

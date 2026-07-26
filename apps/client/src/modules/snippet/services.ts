@@ -1,10 +1,10 @@
 import type { SnippetInput, Snippet, FilterSnippet } from '@/schema/snippet.schema'
+import type { Filtering } from '@/schema/filter.schema'
 import api from '@/utils/api'
 import { queryBuilder } from '@/store/filterUtils'
 
-export const getSnippet = async (filter: any): Promise<FilterSnippet> => {
+export const getSnippet = async (filter: Filtering): Promise<FilterSnippet> => {
     const params = queryBuilder(filter)
-    console.log(params);
     
     const res = await api.get(`snippets?${params}`)
     return res.data

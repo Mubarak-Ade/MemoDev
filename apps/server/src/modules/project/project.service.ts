@@ -68,7 +68,11 @@ const CreateProjectService = async (data: ProjectDTO, userId: string) => {
 }
 
 const GetProjectService = async (userId: string) => {
-    const userObjectId = new mongoose.Types.ObjectId(userId)
+    if (!mongoose.isValidObjectId(userId)) {
+        throw createHttpError(400, 'Invalid user id')
+    }
+
+    const userObjectId = mongoose.mongo.ObjectId.createFromHexString(userId)
 
     const project = await Project.aggregate([
         {

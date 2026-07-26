@@ -18,7 +18,7 @@ export const SnippetSchema = z.object({
     updatedAt: z.string().optional()
 })
 
-const FilterSnippetSchema = z.object({
+export const FilterSnippetSchema = z.object({
     filter: z.object({
         limit: z.number(),
         total: z.number(),

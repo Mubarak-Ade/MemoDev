@@ -33,5 +33,7 @@ const SessionSchema = new Schema({
     }
 }, { timestamps: true })
 
+SessionSchema.index({ expireAt: 1 }, { expireAfterSeconds: 0 })
+
 const Session : Model<ISession> = model<ISession>("Session", SessionSchema)
 export default Session

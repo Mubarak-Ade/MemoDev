@@ -36,7 +36,7 @@ export const getSingleSnippet: RequestHandler = async (req, res, next): Promise<
 export const getSnippetDetails: RequestHandler = async (req, res, next): Promise<void> => {
     try {
         const slug = req.params.slug as string
-        const snippet = await SnippetService.GetSnippetDetails(slug)
+        const snippet = await SnippetService.GetSnippetDetails(slug, req.userId as string)
         res.status(200).json(snippet)
     } catch (error: unknown) {
         next(error)

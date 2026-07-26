@@ -1,15 +1,44 @@
+import createHttpError from 'http-errors'
+import mongoose from 'mongoose'
+import z from 'zod'
+
+const optionalCsv = z
+    .string()
+    .trim()
+    .optional()
+    .transform((value) => value ? value.split(',').map((item) => item.trim()).filter(Boolean) : undefined)
+
+const querySchema = z.object({
+    tags: optionalCsv,
+    languages: optionalCsv,
+    project: z.string().trim().optional(),
+    dateRange: z.enum(['1d', '7d', '30d']).optional(),
+    startTime: z.coerce.date().optional(),
+    endTime: z.coerce.date().optional(),
+    limit: z.coerce.number().int().min(1).max(50).default(5),
+    page: z.coerce.number().int().min(1).default(1),
+})
+
 export const queryFilter = (query: any, userId: string) => {
+    const parsed = querySchema.safeParse(query)
+    if (!parsed.success) {
+        throw createHttpError(400, parsed.error.format())
+    }
+
     const ONE_DAY = 24 * 60 * 60 * 1000
 
-    const { tags, languages, project, dateRange, startTime, endTime, limit=5, page=1 } = query
+    const { tags, languages, project, dateRange, startTime, endTime, limit, page } = parsed.data
     let start: Date | null = null
     const end: Date = new Date()
 
     const filter: any = {}
     filter.user = userId
-    if (tags) filter.tags = { $in: tags.split(",") }
-    if (languages) filter.language = { $in: languages.split(",") }
+    if (tags) filter.tags = { $in: tags }
+    if (languages) filter.language = { $in: languages }
     if (project) {
+        if (!mongoose.isValidObjectId(project)) {
+            throw createHttpError(400, 'Invalid project filter')
+        }
         filter.project = project
     }
 
@@ -45,15 +74,15 @@ export const queryFilter = (query: any, userId: string) => {
         filter.updatedAt = {}
 
         if (startTime) {
-            filter.updatedAt.$gte = new Date(startTime)
+            filter.updatedAt.$gte = startTime
         }
 
         if (endTime) {
-            filter.updatedAt.$lte = new Date(endTime)
+            filter.updatedAt.$lte = endTime
         }
     }
 
     filter.isDraft = false
 
-    return {filter, limit: Number(limit), page: Number(page)}
+    return {filter, limit, page}
 }

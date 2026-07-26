@@ -5,12 +5,9 @@ import {
     generateAccessToken,
     generateRefreshToken,
     generateVerifyToken,
-    sendRefreshTokenCookie,
 } from '../../utils/tokenUtils'
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import env from '../../env'
-import { isTokenPayload } from '../../middlewares/authMiddlewares'
-import { Request, Response } from 'express'
 import { resetPasswordEmail, sendVerificationEmail } from '../../utils/emailUtils'
 import Session from '../../models/Session'
 import bcrypt from 'bcryptjs'
@@ -78,12 +75,12 @@ export const login = async (data: Omit<AuthDTO, 'username'>, { userAgent, ip }: 
     const user = await User.findOne({ email: data.email })
 
     if (!user) {
-        throw createHttpError(404, 'User Not Found')
+        throw createHttpError(400, 'Invalid email or password')
     }
     const isMatch = await user.comparePassword(data.password)
 
     if (!isMatch) {
-        throw createHttpError(400, 'Incorrect Password')
+        throw createHttpError(400, 'Invalid email or password')
     }
 
     if (!user.isVerified) {
@@ -141,7 +138,7 @@ export const forgotPassword = async (email: string) => {
     const user = await User.findOne({ email })
 
     if (!user) {
-        throw createHttpError(404, 'User Not Found')
+        return
     }
 
     const { token, expiry } = generateVerifyToken()
@@ -155,13 +152,19 @@ export const forgotPassword = async (email: string) => {
 }
 
 export const resetPassword = async (token: string, password: string) => {
+    if (!token || !password) {
+        throw createHttpError(400, 'Token and password are required')
+    }
+
     const records = await PasswordReset.find()
     let validRecords: IResetPassword | null = null
 
     for (const record of records) {
         const match = await bcrypt.compare(token, record.token)
-        validRecords = record
-        break
+        if (match) {
+            validRecords = record
+            break
+        }
     }
 
     if (!validRecords) {

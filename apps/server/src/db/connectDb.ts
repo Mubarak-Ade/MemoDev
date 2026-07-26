@@ -2,13 +2,12 @@ import mongoose from 'mongoose'
 import env from '../env';
 
 const connectDB = async (): Promise<void> => {
-    try {
-        await mongoose.connect(env.MONGO_URI)
-        console.log('MongoDB is connected successfully')
-    } catch (error: unknown) {
-        console.error(error)
-        process.exit(1)
+    if (mongoose.connection.readyState === 1 || mongoose.connection.readyState === 2) {
+        return
     }
+
+    await mongoose.connect(env.MONGO_URI)
+    console.log('MongoDB is connected successfully')
 }
 
 export default connectDB
