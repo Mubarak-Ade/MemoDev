@@ -11,7 +11,10 @@ import env from '../../env'
 import { resetPasswordEmail, sendVerificationEmail } from '../../utils/emailUtils'
 import Session from '../../models/Session'
 import bcrypt from 'bcryptjs'
-import PasswordReset, { IResetPassword } from '../../models/PasswordReset'
+import PasswordReset from '../../models/PasswordReset'
+import crypto from 'crypto'
+
+const hashResetToken = (token: string) => crypto.createHash('sha256').update(token).digest('hex')
 
 const signup = async (data: AuthDTO) => {
     if (!data) {
@@ -143,7 +146,7 @@ export const forgotPassword = async (email: string) => {
 
     const { token, expiry } = generateVerifyToken()
 
-    const tokenHash = await bcrypt.hash(token, 10)
+    const tokenHash = hashResetToken(token)
 
     await PasswordReset.create({ userId: user._id, token: tokenHash, expiresAt: expiry })
 
@@ -156,23 +159,13 @@ export const resetPassword = async (token: string, password: string) => {
         throw createHttpError(400, 'Token and password are required')
     }
 
-    const records = await PasswordReset.find()
-    let validRecords: IResetPassword | null = null
-
-    for (const record of records) {
-        const match = await bcrypt.compare(token, record.token)
-        if (match) {
-            validRecords = record
-            break
-        }
-    }
+    const validRecords = await PasswordReset.findOne({
+        token: hashResetToken(token),
+        expiresAt: { $gt: new Date() },
+    })
 
     if (!validRecords) {
         throw createHttpError(400, 'Invalid token')
-    }
-
-    if (validRecords.expiresAt < new Date()) {
-        throw createHttpError(400, 'expired token')
     }
 
     const user = await User.findById(validRecords.userId)

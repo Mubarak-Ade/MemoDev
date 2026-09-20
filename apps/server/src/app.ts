@@ -9,6 +9,7 @@ import dashboardRoute from "./modules/dashboard/dashboard.route"
 import { isHttpError } from 'http-errors'
 import cookieParser from 'cookie-parser';
 import cors from "cors"
+import helmet from 'helmet'
 import env from './env';
 import { errorHandler, NotFoundHandler } from './middlewares/errorMiddleware'
 import { protect } from './middlewares/authMiddlewares'
@@ -18,6 +19,7 @@ app.use(cors({
     origin: env.CLIENT_URL,
     credentials: true
 }))
+app.use(helmet())
 
 app.use(cookieParser())
 

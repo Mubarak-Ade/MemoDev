@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express'
 import AuthService from './auth.service'
 import { zodParser } from '../../utils/zodValidator'
-import { AuthSchema } from '../../schema/auth.schema'
+import { AuthSchema, EmailSchema, ResetPasswordSchema } from '../../schema/auth.schema'
 import { clearAuthCookies, sendRefreshTokenCookie } from '../../utils/tokenUtils'
 import createHttpError from 'http-errors'
 import { parseDevice, parseIp } from '../../utils/sessionUtils'
@@ -29,7 +29,8 @@ export const login: RequestHandler = async (req, res, next): Promise<void> => {
 
 export const verifyEmail: RequestHandler = async (req, res, next): Promise<void> => {
     try {
-        await AuthService.verifyEmail(req.query.token as string)
+        const token = typeof req.query.token === 'string' ? req.query.token : ''
+        await AuthService.verifyEmail(token)
         res.json({ message: 'Email Verified Successfully. You can now login' })
     } catch (error: unknown) {
         next(error)
@@ -38,7 +39,8 @@ export const verifyEmail: RequestHandler = async (req, res, next): Promise<void>
 
 export const resendEmail: RequestHandler = async (req, res, next): Promise<void> => {
     try {
-        const sent = await AuthService.resendVerifyEmail(req.body.email)
+        const { email } = zodParser(EmailSchema, req.body)
+        const sent = await AuthService.resendVerifyEmail(email)
         res.status(200).json({
             message: 'If the email exists and is unverified, a link has been sent',
             sent,
@@ -92,8 +94,9 @@ export const logout: RequestHandler = async (req, res, next): Promise<void> => {
 
 export const forgotPassword : RequestHandler = async (req, res, next): Promise<void> => {
   try {
-    await AuthService.forgotPassword(req.body.email)
-    res.status(200).json({ message: "Resent link sent to your email" });
+    const { email } = zodParser(EmailSchema, req.body)
+    await AuthService.forgotPassword(email)
+    res.status(200).json({ message: "If the email exists, a reset link has been sent" });
   } catch (error: unknown) {
     next(error);
   }
@@ -101,7 +104,8 @@ export const forgotPassword : RequestHandler = async (req, res, next): Promise<v
 
 export const resetPassword : RequestHandler = async (req, res, next): Promise<void> => {
   try {
-    await AuthService.resetPassword(req.body.token, req.body.password)
+    const { token, password } = zodParser(ResetPasswordSchema, req.body)
+    await AuthService.resetPassword(token, password)
     res.status(200).json({ message: "Password reset successfully" });
   } catch (error: unknown) {
     next(error);

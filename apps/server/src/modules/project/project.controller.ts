@@ -38,7 +38,7 @@ export const createProject: RequestHandler = async (req, res, next): Promise<voi
     try {
         const data = zodParser(ProjectSchema, req.body)
         const project = await ProjectService.CreateProjectService(data, req.userId as string)
-        res.status(201).json(project)
+        res.status(200).json(project)
     } catch (error: unknown) {
         next(error)
     }
@@ -61,7 +61,7 @@ export const deleteProject: RequestHandler = async (req, res, next): Promise<voi
         const id = req.params.id as string
         const userId = req.userId as string
         await ProjectService.DeleteProjectService(id, userId)
-        res.status(204).json({ message: 'Project Deleted Successfully' })
+        res.sendStatus(204)
     } catch (error: unknown) {
         next(error)
     }

@@ -41,9 +41,9 @@ function App() {
                     <Route path="/drafts" Component={DraftPage} />
                     <Route path="/projects/" Component={ProjectManagement} />
                     <Route path="/projects/:slug" Component={SnippetList} />
+                    <Route path="/snippets/create" Component={SnippetEditor} />
+                    <Route path="/snippets/:slug" Component={SnippetPreview} />
                 </Route>
-                <Route path="/snippets/create" Component={SnippetEditor} />
-                <Route path="/snippets/:slug" Component={SnippetPreview} />
             </Routes>
             <Modal />
             <Toaster />

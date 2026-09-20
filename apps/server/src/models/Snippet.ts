@@ -1,5 +1,4 @@
 import mongoose, { Document, model, Model } from "mongoose";
-import { takeCoverage } from "node:v8";
 import { createSlug } from "../utils/slug";
 
 type TimeStamps = {

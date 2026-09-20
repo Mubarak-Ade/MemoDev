@@ -125,7 +125,7 @@ export const SideBar = () => {
                             No Project
                         </p>
                 }
-                <Link to="projects">
+                <Link to="/projects">
                     <Button className="justify-start" variant={'link'}>
                         More Project <HiDotsHorizontal />
                     </Button>

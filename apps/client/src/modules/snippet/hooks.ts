@@ -16,8 +16,6 @@ import { useFilterStore } from '@/store/FilteStore'
 export const useSnippet = () => {
     const {dateRange, languages, limit, page, project, tags} = useFilterStore()
     const param = {dateRange, languages, limit, page, project, tags}
-    console.log(param);
-    
     return useQuery<FilterSnippet>({
         queryKey: ['snippets', param],
         queryFn: () => getSnippet(param),
@@ -33,7 +31,7 @@ export const useDrafts = () => {
 
 export const useGetSnippet = (id?: string) => {
     return useQuery<Snippet>({
-        queryKey: ['snippets', id],
+        queryKey: ['snippet', id],
         queryFn: () => getSingleSnippets(id as string),
         enabled: !!id,
     })
@@ -54,7 +52,7 @@ export const useLangs = () => {
 
 export const useSnippetDetails = (slug?: string) => {
     return useQuery<Snippet>({
-        queryKey: ['snippets', slug],
+        queryKey: ['snippet-preview', slug],
         queryFn: () => getSnippetDetails(slug as string),
         enabled: !!slug,
     })
@@ -81,7 +79,7 @@ export const useEditSnippet = (id?: string) => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['snippets'] })
-            queryClient.invalidateQueries({ queryKey: ['snippets', id] })
+            queryClient.invalidateQueries({ queryKey: ['snippet', id] })
         },
     })
 }

@@ -67,7 +67,7 @@ export const createSnippet: RequestHandler = async (req, res, next): Promise<voi
     try {
         const data = zodParser(SnippetSchema, req.body)
         const snippet = await SnippetService.CreateSnippetService(data, req.userId as string)
-        res.status(201).json(snippet)
+        res.status(200).json(snippet)
     } catch (error: unknown) {
         next(error)
     }
@@ -88,7 +88,7 @@ export const updateSnippet: RequestHandler = async (req, res, next): Promise<voi
 export const deleteSnippet: RequestHandler = async (req, res, next): Promise<void> => {
     try {
         await SnippetService.DeleteSnippetService(req.params.id as string, req.userId as string)
-        res.status(204).json({ message: 'Snippet Deleted Successfully' })
+        res.sendStatus(204)
     } catch (error: unknown) {
         next(error)
     }

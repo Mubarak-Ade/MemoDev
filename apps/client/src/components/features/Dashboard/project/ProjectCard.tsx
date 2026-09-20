@@ -30,8 +30,6 @@ interface ProjectCardProps{
 
 export const ProjectCard = ({id, slug, icon, name: title, color, description, updatedAt, totalSnippets} : ProjectCardProps) => {
     const Icon = iconMap[icon] || iconMap.folder
-    console.log(color);
-
     const navigate = useNavigate()
     const [actionLabel, setActionLabel] = useState<string | null>(null)
     

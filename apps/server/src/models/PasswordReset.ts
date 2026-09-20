@@ -19,6 +19,7 @@ export const ResetPasswordSchema = new Schema({
     expiresAt: {
         type: Date,
         required: true,
+        index: { expires: 0 },
     },
 })
 

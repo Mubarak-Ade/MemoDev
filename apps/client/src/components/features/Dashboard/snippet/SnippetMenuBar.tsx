@@ -31,8 +31,6 @@ export const SnippetMenuBar = memo(({ id, navigate, onActionStateChange }: MenuB
     const deleteMutation = useDeleteSnippet()
 
      const handleEditSnippet = () => {
-        console.log("Button Clicked id: ", id);
-        
         navigate('/snippets/create', { state: id })
     }
 

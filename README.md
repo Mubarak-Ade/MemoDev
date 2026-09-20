@@ -72,6 +72,8 @@ MemoDev/
 ├── apps/
 │   ├── client/    # React frontend
 │   └── server/    # Express API
+├── workers/
+│   └── server-failover-proxy/  # Cloudflare API failover Worker
 ├── packages/
 └── README.md
 ```
@@ -161,6 +163,33 @@ You can also build each workspace separately:
 npm run build -w @memodev/server
 npm run build -w @memodev/client
 ```
+
+---
+
+## API Failover Worker
+
+`workers/server-failover-proxy` is a Cloudflare Worker that proxies API requests to a primary deployment and retries the backup deployment when the primary times out, cannot be reached, or responds with a 5xx status. Client errors (4xx) are returned directly and do not trigger a retry.
+
+Install Wrangler, then authenticate and configure the two upstreams:
+
+```bash
+npm install -g wrangler
+wrangler login
+wrangler secret put PRIMARY_URL --cwd workers/server-failover-proxy
+wrangler secret put BACKUP_URL --cwd workers/server-failover-proxy
+```
+
+Enter complete origins without `/api`, for example `https://api-primary.example.com` and `https://api-backup.example.com`. Test it locally and deploy it:
+
+```bash
+cp workers/server-failover-proxy/.dev.vars.example workers/server-failover-proxy/.dev.vars
+npm run dev:proxy
+npm run deploy:proxy
+```
+
+Set the production frontend environment variable `VITE_API_URL` to the deployed Worker origin, for example `https://memodev-server-failover-proxy.<account>.workers.dev`. The client already appends `/api` to this value.
+
+For cookie-based authentication, attach the Worker to an API subdomain of the same site as the frontend (for example, `api.example.com` for `app.example.com`) instead of relying on `workers.dev`. Update the backend `CLIENT_URL` on both primary and backup deployments to the frontend origin, then redeploy the frontend after changing `VITE_API_URL`.
 
 ---
 
